@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { UserDto } from './dto';
 import { UserService } from './user.service';
 
@@ -8,13 +8,11 @@ export class UserController {
 
   @Post('signup')
   signup(@Body() userDto: UserDto) {
-    console.log({
-      userDto,
-    });
     return this.userService.signup(userDto);
   }
 
   @Post('signin')
+  @HttpCode(200)
   signin(@Body() userDto: UserDto) {
     return this.userService.signin(userDto);
   }

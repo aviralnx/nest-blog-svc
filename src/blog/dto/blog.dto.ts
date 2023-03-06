@@ -1,6 +1,6 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-interface comment {
+export interface comment {
   by: string;
   timestamp: string;
   value: string;
@@ -13,7 +13,7 @@ export class BlogDto {
   @IsNotEmpty()
   @IsString()
   description: string;
-  @IsArray()
   @IsOptional()
+  @IsArray()
   comments: [comment];
 }

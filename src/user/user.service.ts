@@ -5,29 +5,38 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { USERS } from './constants';
+import UserRepository from './repository/user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private userRepo: UserRepository,
+  ) {}
   hashData(data: string) {
     return bcrypt.hash(data, 10);
   }
 
   async signup(userDto) {
-    if (USERS.findIndex(({ email }) => email === userDto.email) !== -1) {
+    const prevUser = await this.userRepo.get({ email: userDto.email });
+    if (prevUser) {
       throw new BadRequestException('Already registered');
     }
     const hash = await this.hashData(userDto.password);
-    USERS.push({
+    const user = await this.userRepo.create({
       email: userDto.email,
       password: hash,
     });
-    return 'signed up';
+    return {
+      message: 'Success',
+      data: {
+        id: user['_id'],
+      },
+    };
   }
 
   async signin(userDto) {
-    const dbUser = USERS.find(({ email }) => userDto.email === email);
+    const dbUser = await this.userRepo.get({ email: userDto.email });
     if (!dbUser) {
       throw new ForbiddenException('Invalid Creds');
     }
@@ -39,9 +48,12 @@ export class UserService {
       throw new ForbiddenException('Invalid Creds');
     }
     return {
-      access_token: this.jwtService.sign({
-        email: dbUser.email,
-      }),
+      message: 'Success',
+      data: {
+        access_token: this.jwtService.sign({
+          email: dbUser.email,
+        }),
+      },
     };
   }
 }

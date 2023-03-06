@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { BLOGS } from './constants';
+import BlogRepository from './repository/blog.repository';
 
 @Injectable()
 export class BlogService {
-  createBlogPost(blogDto) {
-    BLOGS.push(blogDto);
-    return 'blog created';
+  constructor(private blogRepo: BlogRepository) {}
+
+  async createBlogPost(blogDto) {
+    const createdBlog = await this.blogRepo.create(blogDto);
+    return {
+      message: 'Success',
+      data: {
+        createdBlog,
+      },
+    };
   }
 
-  getBlogPost(email) {
-    return BLOGS.filter(({ owner }) => owner === email);
+  async getBlogPost(email) {
+    const allUserBlogs = await this.blogRepo.getAll({ owner: email });
+    return allUserBlogs;
   }
 }

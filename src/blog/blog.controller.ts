@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { BlogService } from './blog.service';
 import { BlogDto } from './dto';
@@ -12,13 +20,14 @@ export class BlogController {
   createBlogPost(@Body() blogDto: BlogDto, @Req() request) {
     return this.blogService.createBlogPost({
       ...blogDto,
-      owner: request.user.email,
+      owner: request.user?.email,
     });
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
+  @HttpCode(200)
   getBlogPosts(@Req() request) {
-    return this.blogService.getBlogPost(request.user.email);
+    return this.blogService.getBlogPost(request.user?.email);
   }
 }
