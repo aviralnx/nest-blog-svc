@@ -6,17 +6,25 @@ export class BlogService {
   constructor(private blogRepo: BlogRepository) {}
 
   async createBlogPost(blogDto) {
-    const createdBlog = await this.blogRepo.create(blogDto);
-    return {
-      message: 'Success',
-      data: {
-        createdBlog,
-      },
-    };
+    try {
+      const createdBlog = await this.blogRepo.create(blogDto);
+      return {
+        message: 'Success',
+        data: {
+          createdBlog,
+        },
+      };
+    } catch (err) {
+      console.log('*****createBlogPost Service*****', err);
+    }
   }
 
   async getBlogPost(email) {
-    const allUserBlogs = await this.blogRepo.getAll({ owner: email });
-    return allUserBlogs;
+    try {
+      const allUserBlogs = await this.blogRepo.getAll({ owner: email });
+      return allUserBlogs;
+    } catch (err) {
+      console.log('*****getBlogPost Service*****', err);
+    }
   }
 }
