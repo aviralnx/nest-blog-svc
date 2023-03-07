@@ -7,7 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/nest-blog-svc'),
+    MongooseModule.forRoot(configuration().mongo_url),
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
