@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { SECRET } from './constants';
+import configuration from 'src/config/configuration';
 import UserRepository from './repository/user.repository';
 import { User, UserSchema } from './repository/user.schema';
 import { JwtStrategy } from './strategy/jwt.strategy';
@@ -11,8 +11,8 @@ import { UserService } from './user.service';
 @Module({
   imports: [
     JwtModule.register({
-      secret: SECRET,
-      signOptions: { expiresIn: '60m' },
+      secret: configuration().jwt_secret,
+      signOptions: { expiresIn: configuration().jwt_expire },
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
