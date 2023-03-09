@@ -9,9 +9,7 @@ export class BlogService {
     const createdBlog = await this.blogRepo.create(blogDto);
     return {
       message: 'Success',
-      data: {
-        createdBlog,
-      },
+      data: createdBlog,
     };
   }
 

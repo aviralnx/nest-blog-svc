@@ -8,12 +8,20 @@ export class UserController {
 
   @Post('signup')
   signup(@Body() userDto: UserDto) {
-    return this.userService.signup(userDto);
+    try {
+      return this.userService.signup(userDto);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   @Post('signin')
   @HttpCode(200)
   signin(@Body() userDto: UserDto) {
-    return this.userService.signin(userDto);
+    try {
+      return this.userService.signin(userDto);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

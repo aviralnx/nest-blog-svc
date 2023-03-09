@@ -10,15 +10,23 @@ export class BlogController {
   @UseGuards(AuthGuard('jwt'))
   @Post('create')
   createBlogPost(@Body() blogDto: BlogDto, @Req() request) {
-    return this.blogService.createBlogPost({
-      ...blogDto,
-      owner: request.user?.email,
-    });
+    try {
+      return this.blogService.createBlogPost({
+        ...blogDto,
+        owner: request.user?.email,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
   getBlogPosts(@Req() request) {
-    return this.blogService.getBlogPost(request.user?.email);
+    try {
+      return this.blogService.getBlogPost(request.user?.email);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
