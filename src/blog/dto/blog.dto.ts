@@ -1,8 +1,21 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
-export interface comment {
+class Comment {
+  @IsNotEmpty()
+  @IsString()
   by: string;
+  @IsOptional()
+  @IsString()
   timestamp: string;
+  @IsNotEmpty()
+  @IsString()
   value: string;
 }
 
@@ -13,7 +26,8 @@ export class BlogDto {
   @IsNotEmpty()
   @IsString()
   description: string;
-  @IsOptional()
   @IsArray()
-  comments: [comment];
+  @ValidateNested({ each: true })
+  @Type(() => Comment)
+  comments: Comment[];
 }

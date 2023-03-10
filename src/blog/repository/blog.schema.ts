@@ -1,9 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { comment } from '../dto';
 
 export type BlogDocument = HydratedDocument<Blog>;
 
+interface comment {
+  by: string;
+  timestamp: string;
+  value: string;
+}
 @Schema()
 export class Blog {
   @Prop()
